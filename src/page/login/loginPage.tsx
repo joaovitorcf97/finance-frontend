@@ -5,8 +5,9 @@ import { useMutation } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
-import { fecthLogin } from '../../api/login';
-import { UserContext } from '../../hooks/UserContext';
+import { fecthLogin } from '../../api/auth';
+import { Logo } from '../../components/logo';
+import { AuthContext } from '../../context/authContext';
 
 const loginForm = z.object({
   email: z.string().email().min(1, 'Campo obrigatório'),
@@ -23,7 +24,7 @@ export function LoginPage() {
     formState: { isSubmitting },
   } = useForm<LoginForm>({ resolver: zodResolver(loginForm) });
 
-  const { login } = useContext(UserContext);
+  const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const { mutateAsync: authenticate } = useMutation({ mutationFn: fecthLogin });
@@ -33,7 +34,9 @@ export function LoginPage() {
       loginForm.parse(data);
       const response = await authenticate(data);
       login(response.data.accessToken);
-      navigate('/dashboard');
+      // const user = await fecthUserProfile(response.data.accessToken);
+      // setUser(user.data);
+      navigate('/');
       toast.success('Login feito com sucesso');
     } catch (error) {
       toast.error('Erro ao fazer login');
@@ -41,9 +44,12 @@ export function LoginPage() {
   }
 
   return (
-    <form className="flex flex-col w-full" onSubmit={handleSubmit(handleLogin)}>
+    <form
+      className="flex flex-col w-[380px] bg-white p-6 rounded-md shadow-md"
+      onSubmit={handleSubmit(handleLogin)}
+    >
       <div className="pb-4">
-        <h1 className="text-3xl font-bold  text-green-950">Login</h1>
+        <Logo />
         <p className="text-zinc-600 text-sm pt-2">Entre com suas credenciais</p>
       </div>
 
@@ -54,7 +60,7 @@ export function LoginPage() {
         <input
           type="text"
           {...register('email')}
-          className="border border-slate-400 rounded  focus:outline-green-900 px-4 py-2 text-sm"
+          className="border border-slate-400 rounded  focus:outline-cyan-600 px-4 py-2 text-sm"
         />
 
         {errors.email && (
@@ -69,7 +75,7 @@ export function LoginPage() {
           id="password"
           type="password"
           {...register('password')}
-          className="border border-slate-400 rounded  focus:outline-green-900 px-4 py-2 text-sm"
+          className="border border-slate-400 rounded  focus:outline-cyan-600 px-4 py-2 text-sm"
         />
         {errors.password && (
           <span className="text-red-500 text-xs">Campo obrigatório</span>
@@ -79,7 +85,7 @@ export function LoginPage() {
       <div className="py-4 text-right">
         <a
           href="#"
-          className="text-green-900 text-sm hover:underline hover:text-green-950 font-medium"
+          className="text-zinc-900 text-sm hover:underline hover:text-zinc-900 font-medium"
         >
           Esqueceu a senha?
         </a>
@@ -88,7 +94,7 @@ export function LoginPage() {
       <button
         disabled={isSubmitting}
         type="submit"
-        className="bg-green-800 h-10 mt-4 rounded text-white hover:bg-green-900 text-sm font-bold"
+        className="bg-cyan-600 h-10 mt-4 rounded text-white hover:bg-cyan-700 text-sm font-bold"
       >
         Entrar
       </button>

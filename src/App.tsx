@@ -1,18 +1,17 @@
 import { QueryClientProvider } from 'react-query';
-import { BrowserRouter } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { UserProvider } from './hooks/UserContext';
+import { AuthProvider } from './context/authContext';
 import { queryClient } from './lib/reactQuery';
-import { AppRoutes } from './routes/routes';
+import { routes } from './routes';
 
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <UserProvider>
-          <AppRoutes />
-        </UserProvider>
-      </BrowserRouter>
+      <AuthProvider>
+        <RouterProvider router={routes} />
+      </AuthProvider>
+
       {/* <ReactQueryDevtools initialIsOpen={false} /> */}
       <Toaster position="top-right" richColors />
     </QueryClientProvider>

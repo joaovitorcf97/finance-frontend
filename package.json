@@ -11,6 +11,9 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
+    "@phosphor-icons/react": "^2.0.15",
+    "@radix-ui/react-avatar": "^1.0.4",
+    "@radix-ui/react-dropdown-menu": "^2.0.6",
     "axios": "^1.6.7",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.3",
